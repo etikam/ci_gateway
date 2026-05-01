@@ -80,11 +80,9 @@ Puis ouvre dans le navigateur : **http://127.0.0.1:8080/dashboard/**
 
 ## Branchement d’une autre stack Docker
 
-Résumé (détail et exemples : à compléter dans la phase « guide de branchement » du backlog) :
+Guide détaillé (réseau, labels, exemple complet, pièges) : **`BRANCHEMENT.md`**.
 
-1. Déclarer le réseau **`traefik-public`** comme **externe** dans le `docker-compose` du projet.
-2. Attacher le service HTTP du projet à ce réseau.
-3. Mettre **`traefik.enable=true`** et les labels **router** / **rule** `Host(...)` + **`traefik.docker.network=traefik-public`** + certificats (`tls`, `certresolver=letsencrypt`) sur le service concerné.
+En résumé : réseau externe **`traefik-public`**, **`traefik.enable=true`**, **`traefik.docker.network=traefik-public`**, routeur **`websecure`** + **`tls.certresolver=letsencrypt`**, et **`loadbalancer.server.port`** = port d’écoute **dans** le conteneur.
 
 `exposedByDefault` est **`false`** sur ce gateway : sans **`traefik.enable=true`**, un conteneur n’est **pas** publié par Traefik.
 
