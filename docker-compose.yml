@@ -1,6 +1,7 @@
 services:
   traefik:
-    image: traefik:v3.4
+    # v3.6+ : client Docker avec négociation d’API (compatible Docker Engine récent, min. API 1.40+).
+    image: traefik:v3.6
     container_name: traefik
     restart: unless-stopped
     security_opt:
@@ -21,8 +22,6 @@ services:
       - "127.0.0.1:8080:8080"
     environment:
       - TZ=UTC
-      # Évite l’erreur « client version 1.24 is too old » avec Docker Engine récent (API min. 1.40+).
-      - DOCKER_API_VERSION=1.45
     env_file:
       - .env
     volumes:

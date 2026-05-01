@@ -100,7 +100,7 @@ Réglages notables :
 
 ## Dépannage — `client version 1.24 is too old`
 
-Si les logs affichent une erreur du type **Minimum supported API version is 1.40** : le binaire Traefik parlait au démon avec une API trop ancienne. Le `docker-compose.yml` fixe **`DOCKER_API_VERSION=1.45`** sur le service Traefik. Après mise à jour du fichier : `docker compose up -d` dans `gateway/`.
+Avec **Docker Engine récent**, les versions de Traefik **strictement inférieures à 3.6** utilisaient une API Docker trop basse ; la variable **`DOCKER_API_VERSION` ne suffit pas** (le client embarqué dans Traefik ne la prenait pas en compte pour ces appels). Ce dépôt utilise **`traefik:v3.6`**, qui négocie correctement l’API avec le démon. Après mise à jour de l’image : `docker compose pull && docker compose up -d` dans `gateway/`.
 
 ## Mise à jour Traefik
 
