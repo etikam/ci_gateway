@@ -39,14 +39,7 @@ providers:
     network: traefik-public
     watch: true
 
-# Let's Encrypt — variables injectées dans le conteneur via `gateway/.env` (env_file Compose).
-certificatesResolvers:
-  letsencrypt:
-    acme:
-      email: ${ACME_EMAIL}
-      storage: /letsencrypt/acme.json
-      caServer: ${ACME_CA_SERVER}
-      tlsChallenge: {}
+# ACME (Let's Encrypt) : défini en arguments Traefik dans `docker-compose.yml` pour que Docker Compose substitue les URLs / e-mails depuis `gateway/.env` (pas d’interpolation ${VAR} fiable dans ce YAML Traefik pour acme.caServer).
 
 log:
   level: INFO

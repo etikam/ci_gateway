@@ -98,13 +98,13 @@ Réglages notables :
 
 ## Dépannage — `Router uses a nonexistent certificate resolver letsencrypt`
 
-Le bloc **`certificatesResolvers.letsencrypt`** est défini dans **`traefik.yml`** ; les valeurs **`ACME_EMAIL`** / **`ACME_CA_SERVER`** viennent des **variables d’environnement** du conteneur (`gateway/.env` + surcharge dans `docker-compose.yml`). Pas de passerelle « oubliée » : corrige `.env`, enlève tout **espace en fin de ligne** sur `ACME_CA_SERVER`, puis :
+Le résolveur est déclaré en **arguments Traefik** dans **`docker-compose.yml`** (`--certificatesresolvers.letsencrypt…`). Docker Compose substitue **`${ACME_EMAIL}`** et **`${ACME_CA_SERVER}`** depuis **`gateway/.env`** avant de lancer Traefik ; ne pas s’appuyer sur **`${VAR}`** dans **`traefik.yml`** pour **`acme`** (Traefik n’interpole pas ces champs comme attendu pour l’URL du serveur ACME.)
+
+Corrige `.env`, sans **espace en fin de ligne** sur `ACME_CA_SERVER`, puis :
 
 ```bash
 docker compose up -d --force-recreate
 ```
-
-Si l’erreur persistait encore avec l’ancienne config utilisant **`command:`** Traefik CLI, passe à cette version (**résolveur dans `traefik.yml`**) puis recrée le conteneur.
 
 ## Dépannage — `client version 1.24 is too old`
 
