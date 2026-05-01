@@ -96,6 +96,16 @@ Réglages notables :
 - **`X-Robots-Tag: noindex, ...`** : évite d’indexer par erreur des environnements de dev / VPS scolaire. Pour un site public à référencer, retire ou adapte cette ligne dans `middleware-security-headers.yml`.
 - **CSP** (`Content-Security-Policy`) : volontairement **absente** ici, car elle casse vite des frontends variés (scripts inline, CDN). Les projets peuvent ajouter un middleware CSP **par route** via labels si besoin.
 
+## Dépannage — `Router uses a nonexistent certificate resolver letsencrypt`
+
+Le conteneur Traefik a été démarré **sans** résolveur ACME valide (souvent **`ACME_EMAIL`** ou **`ACME_CA_SERVER`** vide dans `gateway/.env` au moment du `up`). Corrige le `.env`, puis :
+
+```bash
+docker compose up -d --force-recreate
+```
+
+Le `docker-compose.yml` du gateway prévoit des **valeurs par défaut** pour que le nom `letsencrypt` existe toujours ; en production, mets un **vrai** `ACME_EMAIL` dans `.env`.
+
 ## Dépannage — `client version 1.24 is too old`
 
 Avec **Docker Engine récent**, les versions de Traefik **strictement inférieures à 3.6** utilisaient une API Docker trop basse ; la variable **`DOCKER_API_VERSION` ne suffit pas** (le client embarqué dans Traefik ne la prenait pas en compte pour ces appels). Ce dépôt utilise **`traefik:v3.6`**, qui négocie correctement l’API avec le démon. Après mise à jour de l’image : `docker compose pull && docker compose up -d` dans `gateway/`.
