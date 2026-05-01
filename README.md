@@ -98,6 +98,10 @@ Réglages notables :
 - **`X-Robots-Tag: noindex, ...`** : évite d’indexer par erreur des environnements de dev / VPS scolaire. Pour un site public à référencer, retire ou adapte cette ligne dans `middleware-security-headers.yml`.
 - **CSP** (`Content-Security-Policy`) : volontairement **absente** ici, car elle casse vite des frontends variés (scripts inline, CDN). Les projets peuvent ajouter un middleware CSP **par route** via labels si besoin.
 
+## Dépannage — `client version 1.24 is too old`
+
+Si les logs affichent une erreur du type **Minimum supported API version is 1.40** : le binaire Traefik parlait au démon avec une API trop ancienne. Le `docker-compose.yml` fixe **`DOCKER_API_VERSION=1.45`** sur le service Traefik. Après mise à jour du fichier : `docker compose up -d` dans `gateway/`.
+
 ## Mise à jour Traefik
 
 ```bash
