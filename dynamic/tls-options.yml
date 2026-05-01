@@ -1,0 +1,7 @@
+# Options TLS partagées.
+# Référence : entrypoints.websecure.http.tls.options=default dans docker-compose.yml.
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12

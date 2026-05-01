@@ -21,7 +21,6 @@ services:
       - --entrypoints.websecure.address=:443
       - --entrypoints.websecure.http.middlewares=security-headers@file
       - --entrypoints.websecure.http.tls.options=default
-      - --tls.options.default.minversion=VersionTLS12
       - --providers.file.directory=/etc/traefik/dynamic
       - --providers.file.watch=true
       - --providers.docker.endpoint=unix:///var/run/docker.sock
