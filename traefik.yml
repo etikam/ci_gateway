@@ -39,8 +39,14 @@ providers:
     network: traefik-public
     watch: true
 
-# Résolveur Let's Encrypt : e-mail, CA et challenge sont passés en CLI dans
-# `docker-compose.yml` pour que Docker Compose substitue les variables depuis `.env`.
+# Let's Encrypt — variables injectées dans le conteneur via `gateway/.env` (env_file Compose).
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: ${ACME_EMAIL}
+      storage: /letsencrypt/acme.json
+      caServer: ${ACME_CA_SERVER}
+      tlsChallenge: {}
 
 log:
   level: INFO
