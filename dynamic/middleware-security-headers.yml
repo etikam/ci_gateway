@@ -1,0 +1,17 @@
+# Middleware global — en-têtes de sécurité HTTP
+# Référence : security-headers@file (voir traefik.yml → entryPoints.websecure.http.middlewares)
+
+http:
+  middlewares:
+    security-headers:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        referrerPolicy: "strict-origin-when-cross-origin"
+        permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: false
+        customResponseHeaders:
+          X-Robots-Tag: "noindex, nofollow, nosnippet, noarchive"

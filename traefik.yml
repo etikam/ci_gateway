@@ -1,0 +1,48 @@
+# Configuration statique Traefik — gateway CI
+# Les routes applicatives viennent en majorité des labels Docker sur les autres stacks.
+
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+    http:
+      # En-têtes de sécurité sur toutes les routes HTTPS (middleware fichier).
+      middlewares:
+        - security-headers@file
+      tls:
+        options: default
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+
+providers:
+  # En-têtes de sécurité et autres middlewares partagés (fichiers dans ./dynamic/)
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
+    network: traefik-public
+    watch: true
+
+# Résolveur Let's Encrypt : e-mail, CA et challenge sont passés en CLI dans
+# `docker-compose.yml` pour que Docker Compose substitue les variables depuis `.env`.
+
+log:
+  level: INFO
+
+accessLog: {}

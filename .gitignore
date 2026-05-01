@@ -1,0 +1,3 @@
+# Secrets et certificats — ne jamais versionner
+.env
+acme.json
