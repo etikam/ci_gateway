@@ -1,5 +1,8 @@
-# Configuration statique Traefik — gateway CI
-# Les routes applicatives viennent en majorité des labels Docker sur les autres stacks.
+# Référence historique.
+# La configuration statique active du gateway est dans `docker-compose.yml` (`command:`).
+# Ce fichier n’est plus monté dans le conteneur pour éviter de mélanger deux sources
+# de configuration statique Traefik (file + CLI), ce qui empêchait le résolveur ACME
+# `citls` d’être enregistré correctement.
 
 api:
   dashboard: true

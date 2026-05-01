@@ -9,13 +9,32 @@ services:
     read_only: true
     tmpfs:
       - /tmp
-    # Substitution par Compose depuis `gateway/.env`. Résolveur `citls` + challenge HTTP sur `web` (doc Traefik).
+    # Configuration statique Traefik en CLI uniquement.
+    # Ne pas mélanger `traefik.yml` et `command:` pour les options statiques : le résolveur ACME peut être ignoré.
     command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.middlewares=security-headers@file
+      - --entrypoints.websecure.http.tls.options=default
+      - --tls.options.default.minversion=VersionTLS12
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=traefik-public
+      - --providers.docker.watch=true
       - --certificatesresolvers.citls.acme.email=${ACME_EMAIL:-noreply@notes.ci.edu.gn}
       - --certificatesresolvers.citls.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.citls.acme.caserver=${ACME_CA_SERVER:-https://acme-v02.api.letsencrypt.org/directory}
       - --certificatesresolvers.citls.acme.httpchallenge=true
       - --certificatesresolvers.citls.acme.httpchallenge.entrypoint=web
+      - --log.level=INFO
+      - --accesslog=true
     ports:
       - "80:80"
       - "443:443"
@@ -27,7 +46,6 @@ services:
       TZ: UTC
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./dynamic:/etc/traefik/dynamic:ro
       - ./acme.json:/letsencrypt/acme.json
     networks:

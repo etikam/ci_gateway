@@ -19,8 +19,8 @@ Reverse proxy central pour les projets déployés sur le VPS. Les applications *
 | Fichier | Rôle |
 |---------|------|
 | `docker-compose.yml` | Service Traefik, ports, montages. |
-| `traefik.yml` | Points d’entrée `web` / `websecure`, provider Docker, TLS minimal. |
-| `docker-compose.yml` (section `command`) | Paramètres **Let’s Encrypt** (e-mail, `caServer`, challenge TLS) — variables lues depuis `.env` par Compose. |
+| `docker-compose.yml` (section `command`) | Configuration statique Traefik : entrypoints, providers, dashboard local, TLS minimal, **Let’s Encrypt** (`citls`) — variables lues depuis `.env` par Compose. |
+| `traefik.yml` | Référence historique uniquement ; non monté dans le conteneur pour éviter le mélange file + CLI. |
 | `dynamic/middleware-security-headers.yml` | Middleware **`security-headers@file`** (HSTS modéré, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, etc.), appliqué par défaut aux services Docker. |
 | `.env` | Variables sensibles (copie de `.env.example`) — **non versionné**. |
 | `acme.json` | Stockage des certificats Let’s Encrypt — **non versionné**, droits **600**. |
