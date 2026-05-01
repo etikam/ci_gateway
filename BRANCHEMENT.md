@@ -7,7 +7,7 @@ Ce document décrit comment exposer **un conteneur** (ou une stack Compose) derr
 - Traefik écoute en **80** / **443** (UFW ouvert).
 - Réseau Docker externe **`traefik-public`** (créé une fois : `docker network create traefik-public`).
 - Un **nom de domaine** (ou sous-domaine) dont le **DNS** pointe vers l’**IP publique du VPS** (nécessaire pour un certificat Let’s Encrypt **production** valide).
-- Sur ce gateway, le résolveur ACME s’appelle **`letsencrypt`** (voir `gateway/docker-compose.yml`).
+- Sur ce gateway, le résolveur ACME s’appelle **`citls`** (voir `gateway/docker-compose.yml`).
 
 ---
 
@@ -76,7 +76,7 @@ labels:
   - traefik.http.routers.mon-projet-app.rule=Host(`api.mon-domaine.org`)
   - traefik.http.routers.mon-projet-app.entrypoints=websecure
   - traefik.http.routers.mon-projet-app.tls=true
-  - traefik.http.routers.mon-projet-app.tls.certresolver=letsencrypt
+  - traefik.http.routers.mon-projet-app.tls.certresolver=citls
   - traefik.http.services.mon-projet-app.loadbalancer.server.port=8000
 ```
 
@@ -87,7 +87,7 @@ labels:
 | `mon-projet-app` | Nom **unique** du routeur / service côté labels (lettres, chiffres, `-`). |
 | `Host(...)` | Hôte attendu dans l’URL ; doit correspondre au **certificat** demandé. |
 | `entrypoints=websecure` | Trafic **HTTPS** sur le port **443** du VPS. |
-| `certresolver=letsencrypt` | Doit **exactement** correspondre au nom du résolveur sur le gateway. |
+| `certresolver=citls` | Doit **exactement** correspondre au nom du résolveur sur le gateway. |
 | `loadbalancer.server.port` | **Port d’écoute du processus dans le conteneur** (ex. 8000 Django, 3000 Node, 80 nginx). |
 
 L’entrypoint **`web`** (port 80) redirige vers **HTTPS** ; pour une app publique, configure **`websecure`** + **TLS** comme ci-dessus.
@@ -111,7 +111,7 @@ services:
       - traefik.http.routers.whoami-demo.rule=Host(`whoami.example.com`)
       - traefik.http.routers.whoami-demo.entrypoints=websecure
       - traefik.http.routers.whoami-demo.tls=true
-      - traefik.http.routers.whoami-demo.tls.certresolver=letsencrypt
+      - traefik.http.routers.whoami-demo.tls.certresolver=citls
       - traefik.http.services.whoami-demo.loadbalancer.server.port=80
 
 networks:

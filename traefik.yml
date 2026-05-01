@@ -39,7 +39,7 @@ providers:
     network: traefik-public
     watch: true
 
-# ACME (Let's Encrypt) : défini en arguments Traefik dans `docker-compose.yml` pour que Docker Compose substitue les URLs / e-mails depuis `gateway/.env` (pas d’interpolation ${VAR} fiable dans ce YAML Traefik pour acme.caServer).
+# ACME (Let's Encrypt) : résolveur `citls`, arguments dans `docker-compose.yml`, interpolation par Compose depuis `gateway/.env`.
 
 log:
   level: INFO

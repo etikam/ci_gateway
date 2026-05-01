@@ -9,12 +9,13 @@ services:
     read_only: true
     tmpfs:
       - /tmp
-    # Substitution par Docker Compose (fichier `gateway/.env` à la racine du projet) — Traefik ne remplace pas ${VAR} dans acme.caServer du fichier statique.
+    # Substitution par Compose depuis `gateway/.env`. Résolveur `citls` + challenge HTTP sur `web` (doc Traefik).
     command:
-      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-noreply@notes.ci.edu.gn}
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CA_SERVER:-https://acme-v02.api.letsencrypt.org/directory}
-      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.citls.acme.email=${ACME_EMAIL:-noreply@notes.ci.edu.gn}
+      - --certificatesresolvers.citls.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.citls.acme.caserver=${ACME_CA_SERVER:-https://acme-v02.api.letsencrypt.org/directory}
+      - --certificatesresolvers.citls.acme.httpchallenge=true
+      - --certificatesresolvers.citls.acme.httpchallenge.entrypoint=web
     ports:
       - "80:80"
       - "443:443"

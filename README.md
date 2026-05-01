@@ -82,7 +82,7 @@ Puis ouvre dans le navigateur : **http://127.0.0.1:8080/dashboard/**
 
 Guide détaillé (réseau, labels, exemple complet, pièges) : **`BRANCHEMENT.md`**.
 
-En résumé : réseau externe **`traefik-public`**, **`traefik.enable=true`**, **`traefik.docker.network=traefik-public`**, routeur **`websecure`** + **`tls.certresolver=letsencrypt`**, et **`loadbalancer.server.port`** = port d’écoute **dans** le conteneur.
+En résumé : réseau externe **`traefik-public`**, **`traefik.enable=true`**, **`traefik.docker.network=traefik-public`**, routeur **`websecure`** + **`tls.certresolver=citls`**, et **`loadbalancer.server.port`** = port d’écoute **dans** le conteneur.
 
 `exposedByDefault` est **`false`** sur ce gateway : sans **`traefik.enable=true`**, un conteneur n’est **pas** publié par Traefik.
 
@@ -96,9 +96,9 @@ Réglages notables :
 - **`X-Robots-Tag: noindex, ...`** : évite d’indexer par erreur des environnements de dev / VPS scolaire. Pour un site public à référencer, retire ou adapte cette ligne dans `middleware-security-headers.yml`.
 - **CSP** (`Content-Security-Policy`) : volontairement **absente** ici, car elle casse vite des frontends variés (scripts inline, CDN). Les projets peuvent ajouter un middleware CSP **par route** via labels si besoin.
 
-## Dépannage — `Router uses a nonexistent certificate resolver letsencrypt`
+## Dépannage — `Router uses a nonexistent certificate resolver`
 
-Le résolveur est déclaré en **arguments Traefik** dans **`docker-compose.yml`** (`--certificatesresolvers.letsencrypt…`). Docker Compose substitue **`${ACME_EMAIL}`** et **`${ACME_CA_SERVER}`** depuis **`gateway/.env`** avant de lancer Traefik ; ne pas s’appuyer sur **`${VAR}`** dans **`traefik.yml`** pour **`acme`** (Traefik n’interpole pas ces champs comme attendu pour l’URL du serveur ACME.)
+Le résolveur s’appelle **`citls`** et est défini dans **`gateway/docker-compose.yml`** (`--certificatesresolvers.citls…`). Docker Compose substitue **`${ACME_EMAIL}`** et **`${ACME_CA_SERVER}`** depuis **`gateway/.env`**. Dans les labels applicatifs, utiliser **`certresolver=citls`**. Ne pas s’appuyer sur **`${VAR}` dans `traefik.yml`** pour l’URL ACME : utilise le `.env` du gateway interpolé par Compose.
 
 Corrige `.env`, sans **espace en fin de ligne** sur `ACME_CA_SERVER`, puis :
 
