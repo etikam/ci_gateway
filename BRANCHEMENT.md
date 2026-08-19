@@ -7,7 +7,7 @@ Ce document décrit comment exposer **un conteneur** (ou une stack Compose) derr
 - Traefik écoute en **80** / **443** (UFW ouvert).
 - Réseau Docker externe **`traefik-public`** (créé une fois : `docker network create traefik-public`).
 - Un **nom de domaine** (ou sous-domaine) dont le **DNS** pointe vers l’**IP publique du VPS** (nécessaire pour un certificat Let’s Encrypt **production** valide).
-- Sur ce gateway, le résolveur ACME s’appelle **`citls`** (voir `gateway/docker-compose.yml`).
+- Sur ce gateway, le résolveur ACME s’appelle **`citls`** (voir `api_gateway/docker-compose.yml`).
 
 ---
 
@@ -162,9 +162,9 @@ Pour éviter de taper les quotas Let’s Encrypt en phase de test, le **gateway*
 
 1. `docker compose ps` — le conteneur est **Up**.
 2. `docker network inspect traefik-public` — ton service y figure.
-3. Logs Traefik : `docker compose logs traefik` (depuis le dossier `gateway/`) — erreurs ACME ou de routage.
+3. Logs Traefik : `docker compose logs traefik` (depuis le dossier `api_gateway/`) — erreurs ACME ou de routage.
 4. Depuis ton PC : `curl -I https://ton-sous-domaine` — **HTTP 200** (ou 30x) et en-têtes présents.
 
 ---
 
-_Pour le déploiement du gateway lui-même : voir `gateway/README.md`._
+_Pour le déploiement du gateway lui-même : voir `api_gateway/README.md`._

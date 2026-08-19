@@ -42,7 +42,7 @@ providers:
     network: traefik-public
     watch: true
 
-# ACME (Let's Encrypt) : résolveur `citls`, arguments dans `docker-compose.yml`, interpolation par Compose depuis `gateway/.env`.
+# ACME (Let's Encrypt) : résolveur `citls`, arguments dans `docker-compose.yml`, interpolation par Compose depuis `api_gateway/.env`.
 
 log:
   level: INFO

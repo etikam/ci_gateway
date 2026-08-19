@@ -32,7 +32,7 @@ Reverse proxy central pour les projets déployés sur le VPS. Les applications *
 2. Aller dans ce dossier :
 
    ```bash
-   cd gateway
+   cd api_gateway
    ```
 
 3. Créer `.env` à partir du modèle et **renseigner un vrai e-mail** pour Let’s Encrypt :
@@ -98,7 +98,7 @@ Réglages notables :
 
 ## Dépannage — `Router uses a nonexistent certificate resolver`
 
-Le résolveur s’appelle **`citls`** et est défini dans **`gateway/docker-compose.yml`** (`--certificatesresolvers.citls…`). Docker Compose substitue **`${ACME_EMAIL}`** et **`${ACME_CA_SERVER}`** depuis **`gateway/.env`**. Dans les labels applicatifs, utiliser **`certresolver=citls`**. Ne pas s’appuyer sur **`${VAR}` dans `traefik.yml`** pour l’URL ACME : utilise le `.env` du gateway interpolé par Compose.
+Le résolveur s’appelle **`citls`** et est défini dans **`api_gateway/docker-compose.yml`** (`--certificatesresolvers.citls…`). Docker Compose substitue **`${ACME_EMAIL}`** et **`${ACME_CA_SERVER}`** depuis **`api_gateway/.env`**. Dans les labels applicatifs, utiliser **`certresolver=citls`**. Ne pas s’appuyer sur **`${VAR}` dans `traefik.yml`** pour l’URL ACME : utilise le `.env` du gateway interpolé par Compose.
 
 Corrige `.env`, sans **espace en fin de ligne** sur `ACME_CA_SERVER`, puis :
 
@@ -108,7 +108,7 @@ docker compose up -d --force-recreate
 
 ## Dépannage — `client version 1.24 is too old`
 
-Avec **Docker Engine récent**, les versions de Traefik **strictement inférieures à 3.6** utilisaient une API Docker trop basse ; la variable **`DOCKER_API_VERSION` ne suffit pas** (le client embarqué dans Traefik ne la prenait pas en compte pour ces appels). Ce dépôt utilise **`traefik:v3.6`**, qui négocie correctement l’API avec le démon. Après mise à jour de l’image : `docker compose pull && docker compose up -d` dans `gateway/`.
+Avec **Docker Engine récent**, les versions de Traefik **strictement inférieures à 3.6** utilisaient une API Docker trop basse ; la variable **`DOCKER_API_VERSION` ne suffit pas** (le client embarqué dans Traefik ne la prenait pas en compte pour ces appels). Ce dépôt utilise **`traefik:v3.6`**, qui négocie correctement l’API avec le démon. Après mise à jour de l’image : `docker compose pull && docker compose up -d` dans `api_gateway/`.
 
 ## Mise à jour Traefik
 
